@@ -1,0 +1,99 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2036
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{65A96777-BE91-4689-9DA6-8A58F2363737}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{59A1DB6F-66D8-4289-9731-36DF4CFC1E99}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Magasin", "Magasin", "{47285A73-4705-444B-8417-EB8C4A0D5517}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SimulationFlux", "SimulationFlux", "{492EF5B7-2807-4CBF-9AA4-0349F1910A58}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BlocCommun", "BlocCommun", "{97FD1469-C016-48CF-A7ED-7E4989EFC897}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimulationFlux.API", "Services\SimulationFlux\SimulationFlux.API\SimulationFlux.API.csproj", "{E17198BB-F2B7-4EC6-B540-7CFF75AEE3A5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Client.API", "Services\Client\Client.API\Client.API.csproj", "{8A9C4AA7-D54F-4AD1-B648-DB7DA0776DB6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusEvenement", "BlocCommun\BusEvenement\BusEvenement.csproj", "{C423CA1E-7D6A-4C9F-9FF8-F711F10858AD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RabbitMQBus", "BlocCommun\RabbitMQBus\RabbitMQBus.csproj", "{D3173587-50A5-48FC-AAF8-14A99B523595}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C423CA1E-7D6A-4C9F-9FF8-F711F10858AD} = {C423CA1E-7D6A-4C9F-9FF8-F711F10858AD}
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{453DF2BE-9A3C-45A1-AF4C-413F9D82FE87}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebMVC", "Web\WebMVC\WebMVC.csproj", "{BBCEA158-ED54-4710-8F4B-743698E6E52E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Magasin.API", "Services\Magasin\Magasin.API\Magasin.API.csproj", "{68EABFC4-C7FB-47AA-95F2-5861ACE7D6A7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Applications", "Applications", "{0F62C3E3-E9DB-4707-A0F4-18250E7B32A8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimulateurApps", "Applications\SimulateurApps\SimulateurApps.csproj", "{DF3E6D13-789C-4413-B94D-20768F0ECA3E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_SolutionItems", "_SolutionItems", "{3D768123-F90E-4CCA-B95A-2CD6C61ECC33}"
+	ProjectSection(SolutionItems) = preProject
+		Scripts\_Kill.cmd = Scripts\_Kill.cmd
+		Scripts\_RunServices.cmd = Scripts\_RunServices.cmd
+		Scripts\Caisse.API.cmd = Scripts\Caisse.API.cmd
+		Scripts\CaisseFlux.API.cmd = Scripts\CaisseFlux.API.cmd
+		Scripts\Client.API.cmd = Scripts\Client.API.cmd
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E17198BB-F2B7-4EC6-B540-7CFF75AEE3A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E17198BB-F2B7-4EC6-B540-7CFF75AEE3A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E17198BB-F2B7-4EC6-B540-7CFF75AEE3A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E17198BB-F2B7-4EC6-B540-7CFF75AEE3A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A9C4AA7-D54F-4AD1-B648-DB7DA0776DB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A9C4AA7-D54F-4AD1-B648-DB7DA0776DB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A9C4AA7-D54F-4AD1-B648-DB7DA0776DB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A9C4AA7-D54F-4AD1-B648-DB7DA0776DB6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C423CA1E-7D6A-4C9F-9FF8-F711F10858AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C423CA1E-7D6A-4C9F-9FF8-F711F10858AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C423CA1E-7D6A-4C9F-9FF8-F711F10858AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C423CA1E-7D6A-4C9F-9FF8-F711F10858AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3173587-50A5-48FC-AAF8-14A99B523595}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3173587-50A5-48FC-AAF8-14A99B523595}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3173587-50A5-48FC-AAF8-14A99B523595}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3173587-50A5-48FC-AAF8-14A99B523595}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBCEA158-ED54-4710-8F4B-743698E6E52E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBCEA158-ED54-4710-8F4B-743698E6E52E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBCEA158-ED54-4710-8F4B-743698E6E52E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBCEA158-ED54-4710-8F4B-743698E6E52E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68EABFC4-C7FB-47AA-95F2-5861ACE7D6A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68EABFC4-C7FB-47AA-95F2-5861ACE7D6A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68EABFC4-C7FB-47AA-95F2-5861ACE7D6A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68EABFC4-C7FB-47AA-95F2-5861ACE7D6A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF3E6D13-789C-4413-B94D-20768F0ECA3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF3E6D13-789C-4413-B94D-20768F0ECA3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF3E6D13-789C-4413-B94D-20768F0ECA3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF3E6D13-789C-4413-B94D-20768F0ECA3E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{59A1DB6F-66D8-4289-9731-36DF4CFC1E99} = {65A96777-BE91-4689-9DA6-8A58F2363737}
+		{47285A73-4705-444B-8417-EB8C4A0D5517} = {65A96777-BE91-4689-9DA6-8A58F2363737}
+		{492EF5B7-2807-4CBF-9AA4-0349F1910A58} = {65A96777-BE91-4689-9DA6-8A58F2363737}
+		{E17198BB-F2B7-4EC6-B540-7CFF75AEE3A5} = {492EF5B7-2807-4CBF-9AA4-0349F1910A58}
+		{8A9C4AA7-D54F-4AD1-B648-DB7DA0776DB6} = {59A1DB6F-66D8-4289-9731-36DF4CFC1E99}
+		{C423CA1E-7D6A-4C9F-9FF8-F711F10858AD} = {97FD1469-C016-48CF-A7ED-7E4989EFC897}
+		{D3173587-50A5-48FC-AAF8-14A99B523595} = {97FD1469-C016-48CF-A7ED-7E4989EFC897}
+		{BBCEA158-ED54-4710-8F4B-743698E6E52E} = {453DF2BE-9A3C-45A1-AF4C-413F9D82FE87}
+		{68EABFC4-C7FB-47AA-95F2-5861ACE7D6A7} = {47285A73-4705-444B-8417-EB8C4A0D5517}
+		{DF3E6D13-789C-4413-B94D-20768F0ECA3E} = {0F62C3E3-E9DB-4707-A0F4-18250E7B32A8}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D8E672CD-3E30-4F7D-A734-3684C86157B9}
+	EndGlobalSection
+EndGlobal

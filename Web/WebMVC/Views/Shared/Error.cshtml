@@ -1,0 +1,21 @@
+﻿@model VueErreurModele
+@{
+    ViewData["Title"] = "Erreur";
+}
+
+<h1 class="text-danger">Erreur</h1>
+<h2 class="text-danger">Une erreur c'est produite pendant le traitement de votre demande</h2>
+
+<p>
+    <strong>Requete :</strong> <code>@Model.Requete</code>
+</p>
+
+<p>
+    <strong>TypeErreur :</strong> <code>@Model.TypeErreur</code>
+</p>
+<p>
+    <strong>Message:</strong> <code>@Model.Message</code>
+</p>
+<p>
+    <strong>Détail :</strong> <code>@Model.ExceptionMessage</code>
+</p>
