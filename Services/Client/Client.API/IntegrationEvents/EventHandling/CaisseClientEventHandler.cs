@@ -32,6 +32,7 @@ namespace Client.API.IntegrationEvents.EventHandling
             if (@event.evenementClientTypeCourant == "DebutClient")
             {
                 clientItem.DateDerniereVisite = new DateTime(long.Parse(@event.dateEvenement));
+                clientItem.NombreVisite++;
                 await _clientService.MajClient(clientItem);
             }
             // Le client part. 

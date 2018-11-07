@@ -57,7 +57,8 @@ namespace Client.API.Bdd.Services
                 return false;
 
             var miseAJour = Builders<Models.ClientItem>.Update
-                                          .Set(x => x.DateDerniereVisite, model.DateDerniereVisite);
+                                          .Set(x => x.DateDerniereVisite, model.DateDerniereVisite)
+                                          .Set(x => x.NombreVisite, model.NombreVisite);
 
             await Collection().UpdateOneAsync(filtre, miseAJour);
             return true;
