@@ -6,28 +6,20 @@ namespace SimulateurApps.Evenements
 {
     public class CaisseClientEvt
     {
-        public DateTime dateEvenement { get; internal set; }
+        public String dateEvenement { get; internal set; }
 
-        public int Numero { get; internal set; }
+        public int numero { get; internal set; }
 
-        public string NomClient { get; internal set; }
+        public string nomClient { get; internal set; }
 
-        public EtatCaisseClient EtatCaisseClientCourant { get; internal set; }
+        public string etatCaisseClientCourant { get; internal set; }
 
-        public CaisseClientEvt(int _numeroCaisse, string _nomClient, EtatCaisseClient _etatCaisseClient)
+        public CaisseClientEvt(int _numeroCaisse, string _nomClient, string _etatCaisseClient)
         {
-            this.dateEvenement = DateTime.Now;
-            this.Numero = _numeroCaisse;
-            this.NomClient = _nomClient;
-            this.EtatCaisseClientCourant = _etatCaisseClient;
-        }
-
-        public enum EtatCaisseClient
-        {
-            Attente,
-            DebutPassage,
-            FinPassage,
-            Rejete
+            this.dateEvenement = DateTime.Now.Ticks.ToString();
+            this.numero = _numeroCaisse;
+            this.nomClient = _nomClient;
+            this.etatCaisseClientCourant = _etatCaisseClient;
         }
     }
 }

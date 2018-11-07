@@ -1,29 +1,33 @@
-﻿using System;
+﻿using SimulateurApps.Evenements;
+using SimulateurApps.Services;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 
 namespace SimulateurApps.Caisse
 {
-    public class Caisse
+    public class CaisseImpl
     {
         private int NumeroCaisse;
+        private IApiConnecteur apiConnecteur;
         private double TempsAttenteClient;
         private double TempsTraitementClient;
         protected int NombreClientMaximum;
 
-        private Dictionary<DateTime, string> dicFileAttente;
         private EtatCaisse EtatCaisse;
 
-        public Caisse(int _numeroCaisse, CaisseInterface _interface,
+        public CaisseImpl(int _numeroCaisse, IApiConnecteur _apiConnecteur,
             double _tempsAttenteClient, double _tempsTraitementClient,
             int _nombreClientMaximum)
         {
             this.NumeroCaisse = _numeroCaisse;
+            this.apiConnecteur = _apiConnecteur;
             this.TempsAttenteClient = _tempsAttenteClient;
             this.TempsTraitementClient = _tempsTraitementClient;
             this.NombreClientMaximum = _nombreClientMaximum;
-            this.dicFileAttente = new Dictionary<DateTime, string>();
         }
+
+        #region Traitement
 
         public void Traitement()
         {
@@ -34,7 +38,7 @@ namespace SimulateurApps.Caisse
             while (this.EtatCaisse != EtatCaisse.Ferme)
             {
                 // Prochain client.
-                string strClientSuivant = this.RetirerClientSuivant();
+                string strClientSuivant = this.DonneClientSuivant();
 
                 // Cas de client dans l'immédiat.
                 if (strClientSuivant == string.Empty)
@@ -56,6 +60,13 @@ namespace SimulateurApps.Caisse
                 }
             }
         }
+
+        private string DonneClientSuivant()
+        {
+            return $"*Client_{NumeroCaisse}{DateTime.Now.Hour}{DateTime.Now.Minute}";
+        }
+
+        #endregion
 
         #region Changement Etat Caisse
 
@@ -95,12 +106,12 @@ namespace SimulateurApps.Caisse
 
         private void EvenementEtatCaisse()
         {
-            !!!!
+            this.apiConnecteur.EnvoyerEvenementAsync(new CaisseEtatEvt(this.NumeroCaisse, this.EtatCaisse.ToString()));
         }
 
         private void EvenementClient(string _numeroClient, EvenementClientType _evenementClientType)
         {
-            !!!!
+            this.apiConnecteur.EnvoyerEvenementAsync(new CaisseClientEvt(this.NumeroCaisse, _numeroClient, _evenementClientType.ToString()));
         }
 
         #endregion

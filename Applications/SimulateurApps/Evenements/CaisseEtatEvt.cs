@@ -4,17 +4,17 @@ namespace SimulateurApps.Evenements
 {
     public class CaisseEtatEvt
     {
-        public DateTime dateEvenement { get; internal set; }
+        public string dateEvenement { get; internal set; }
 
-        public int Numero { get; internal set; }
+        public int numero { get; internal set; }
 
-        public string EtatCaisseCourant { get; internal set; }
+        public string etatCaisseCourant { get; internal set; }
 
         public CaisseEtatEvt(int _numeroCaisse, string _etat)
         {
-            this.dateEvenement = DateTime.Now;
-            this.Numero = _numeroCaisse;
-            this.EtatCaisseCourant = _etat;
+            this.dateEvenement = DateTime.Now.Ticks.ToString();
+            this.numero = _numeroCaisse;
+            this.etatCaisseCourant = _etat;
         }
     }
 }
