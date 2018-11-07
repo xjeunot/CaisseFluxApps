@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using System.Net;
+using BusEvenement.Abstractions;
 using Microsoft.AspNetCore.Mvc;
+using SimulationFlux.API.IntegrationEvents.Events;
 using SimulationFlux.API.Models;
 
 namespace SimulationFlux.API.Controllers
@@ -13,12 +10,25 @@ namespace SimulationFlux.API.Controllers
     [ApiController]
     public class CaisseEtatController : ControllerBase
     {
+        private readonly IBusEvenement _busEvenement;
+
+        public CaisseEtatController(IBusEvenement busEvenement)
+        {
+            _busEvenement = busEvenement;
+        }
+
         // POST: api/v1/CaisseEtat
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         public IActionResult Post([FromBody]CaisseEtatItem value)
         {
-            Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(value));
+            CaisseEtatEvent evenement = new CaisseEtatEvent()
+            {
+                dateEvenement = value.dateEvenement,
+                etatCaisseCourant = value.etatCaisseCourant,
+                numero = value.numero
+            };
+            _busEvenement.Publier(evenement);
             return Ok();
         }
     }

@@ -1,8 +1,8 @@
-﻿using System;
+﻿using BusEvenement.Evenement;
 
-namespace SimulationFlux.API.Models
+namespace Client.API.IntegrationEvents.Events
 {
-    public class CaisseClientItem
+    public class CaisseClientEvent : StandardEvenement
     {
         public string dateEvenement { get; set; }
 

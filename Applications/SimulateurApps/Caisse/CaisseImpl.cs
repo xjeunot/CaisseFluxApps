@@ -63,7 +63,7 @@ namespace SimulateurApps.Caisse
 
         private string DonneClientSuivant()
         {
-            return $"*Client_{NumeroCaisse}{DateTime.Now.Hour}{DateTime.Now.Minute}";
+            return $"Client_{DateTime.Now.Second}{DateTime.Now.Millisecond}";
         }
 
         #endregion

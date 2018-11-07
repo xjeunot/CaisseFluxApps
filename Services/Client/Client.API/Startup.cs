@@ -5,6 +5,8 @@ using BusEvenement.Abstractions;
 using Client.API.Bdd.Connexion;
 using Client.API.Bdd.Interfaces;
 using Client.API.Bdd.Services;
+using Client.API.IntegrationEvents.EventHandling;
+using Client.API.IntegrationEvents.Events;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -130,16 +132,14 @@ namespace Client.API
              * > Résolution dans la gestion des évènements bus fait par AutoFac.
              * > Peuvent recevoir les autres services (comme la BDD).
              */
-            //services.AddTransient<ProductPriceChangedIntegrationEventHandler>();
-            //services.AddTransient<OrderStartedIntegrationEventHandler>();
+            services.AddTransient<CaisseClientEventHandler>();
         }
 
         private void BusEvenementSouscription(IApplicationBuilder app)
         {
             var busEvenement = app.ApplicationServices.GetRequiredService<IBusEvenement>();
 
-            //busEvenement.Souscrire<ProductPriceChangedIntegrationEvent, ProductPriceChangedIntegrationEventHandler>();
-            //busEvenement.Souscrire<OrderStartedIntegrationEvent, OrderStartedIntegrationEventHandler>();
+            busEvenement.Souscrire<CaisseClientEvent, CaisseClientEventHandler>();
         }
 
         #endregion

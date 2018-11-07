@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace SimulationFlux.API.Models
+﻿namespace Magasin.API.IntegrationEvents.Events
 {
-    public class CaisseClientItem
+    public class CaisseClientEvent
     {
         public string dateEvenement { get; set; }
 
@@ -10,6 +8,6 @@ namespace SimulationFlux.API.Models
 
         public string nomClient { get; set; }
 
-        public string evenementClientTypeCourant { get; set; }
+        public string etatCaisseClientCourant { get; set; }
     }
 }

@@ -10,9 +10,11 @@ namespace Client.API.Bdd.Interfaces
 
         Task<Models.ClientItem> DonneClient(string id);
 
+        Task<Models.ClientItem> RechercherClientUniqueAvecNom(string nom);
+
         Task AjouterClient(Models.ClientItem model);
 
-        /*public async Task<bool> MajClient(Models.Client modele);*/
+        Task<bool> MajClient(Models.ClientItem model);
 
         Task<DeleteResult> DetruireClient(string id);
 

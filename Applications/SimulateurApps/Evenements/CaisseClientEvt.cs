@@ -12,14 +12,14 @@ namespace SimulateurApps.Evenements
 
         public string nomClient { get; internal set; }
 
-        public string etatCaisseClientCourant { get; internal set; }
+        public string evenementClientTypeCourant { get; internal set; }
 
         public CaisseClientEvt(int _numeroCaisse, string _nomClient, string _etatCaisseClient)
         {
             this.dateEvenement = DateTime.Now.Ticks.ToString();
             this.numero = _numeroCaisse;
             this.nomClient = _nomClient;
-            this.etatCaisseClientCourant = _etatCaisseClient;
+            this.evenementClientTypeCourant = _etatCaisseClient;
         }
     }
 }

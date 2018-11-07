@@ -38,26 +38,31 @@ namespace Client.API.Bdd.Services
             return await Collection().Find(filtre).FirstOrDefaultAsync();
         }
 
+        public async Task<Models.ClientItem> RechercherClientUniqueAvecNom(string nom)
+        {
+            var filtre = Builders<Models.ClientItem>.Filter.Eq("Nom", nom);
+            return await Collection().Find(filtre).FirstOrDefaultAsync();
+        }
+
         public async Task AjouterClient(Models.ClientItem model)
         {
             await Collection().InsertOneAsync(model);
         }
 
-        /*public async Task<bool> MajClient(Models.Client modele)
+        public async Task<bool> MajClient(Models.ClientItem model)
         {
-            var filtre = Builders<Models.Client>.Filter.Eq("Nom", modele.Nom);
+            var filtre = Builders<Models.ClientItem>.Filter.Eq("Nom", model.Nom);
             var client = Collection().Find(filtre).FirstOrDefaultAsync();
             if (client.Result == null)
                 return false;
 
-            var update = Builders<Models.Client>.Update
-                                          .Set(x => x.Price, model.Price)
-                                          .Set(x => x.UpdatedOn, model.UpdatedOn);
+            var miseAJour = Builders<Models.ClientItem>.Update
+                                          .Set(x => x.DateDerniereVisite, model.DateDerniereVisite);
 
-            await Collection().UpdateOneAsync(filtre, update);
+            await Collection().UpdateOneAsync(filtre, miseAJour);
             return true;
-        }*/
-
+        }
+    
         public async Task<DeleteResult> DetruireClient(string id)
         {
             var filtre = Builders<Models.ClientItem>.Filter.Eq("Id", id);
