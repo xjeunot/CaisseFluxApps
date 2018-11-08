@@ -15,23 +15,23 @@ namespace WebMVC.Services
             _httpClientFactory = httpClientFactory;
         }
 
-        public async Task<IEnumerable<string>> DonneClients()
+        public IEnumerable<string> DonneClients()
         {
             var client = _httpClientFactory.CreateClient("ApiClientV1");
             string strUrl = "/api/v1/clients";
 
-            var donneesJson = await client.GetStringAsync(strUrl);
+            var donneesJson = client.GetStringAsync(strUrl).Result;
 
             IEnumerable<string> retour = JsonConvert.DeserializeObject<IEnumerable<string>>(donneesJson);
             return retour;
         }
 
-        public async Task<ClientDTO> DonneClient(string id)
+        public ClientDTO DonneClient(string id)
         {
             var client = _httpClientFactory.CreateClient("ApiClientV1");
             string strUrl = $"/api/v1/clients/{id}";
 
-            var donneesJson = await client.GetStringAsync(strUrl);
+            var donneesJson = client.GetStringAsync(strUrl).Result;
 
             ClientDTO retour = JsonConvert.DeserializeObject<ClientDTO>(donneesJson);
             return retour;

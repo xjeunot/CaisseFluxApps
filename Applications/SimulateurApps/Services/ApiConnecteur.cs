@@ -16,26 +16,26 @@ namespace SimulateurApps.Services
             _httpClientFactory = httpClientFactory;
         }
 
-        public async System.Threading.Tasks.Task<bool> EnvoyerEvenementAsync(CaisseEtatEvt caisseEtatEvt)
+        public bool EnvoyerEvenement(CaisseEtatEvt caisseEtatEvt)
         {
             var client = _httpClientFactory.CreateClient("ApiSimulationFluxV1");
             string strUrl = "/api/v1/CaisseEtat";
 
             var clsObjetRequete = new StringContent(JsonConvert.SerializeObject(caisseEtatEvt), Encoding.UTF8, "application/json");
 
-            var reponse = await client.PostAsync(strUrl, clsObjetRequete);
+            var reponse = client.PostAsync(strUrl, clsObjetRequete).Result;
 
             return reponse.IsSuccessStatusCode;
         }
 
-        public async System.Threading.Tasks.Task<bool> EnvoyerEvenementAsync(CaisseClientEvt caisseClientEvt)
+        public bool EnvoyerEvenement(CaisseClientEvt caisseClientEvt)
         {
             var client = _httpClientFactory.CreateClient("ApiSimulationFluxV1");
             string strUrl = "/api/v1/CaisseClient";
 
             var clsObjetRequete = new StringContent(JsonConvert.SerializeObject(caisseClientEvt), Encoding.UTF8, "application/json");
 
-            var reponse = await client.PostAsync(strUrl, clsObjetRequete);
+            var reponse = client.PostAsync(strUrl, clsObjetRequete).Result;
 
             return reponse.IsSuccessStatusCode;
         }

@@ -106,12 +106,12 @@ namespace SimulateurApps.Caisse
 
         private void EvenementEtatCaisse()
         {
-            this.apiConnecteur.EnvoyerEvenementAsync(new CaisseEtatEvt(this.NumeroCaisse, this.EtatCaisse.ToString()));
+            this.apiConnecteur.EnvoyerEvenement(new CaisseEtatEvt(this.NumeroCaisse, this.EtatCaisse.ToString()));
         }
 
         private void EvenementClient(string _numeroClient, EvenementClientType _evenementClientType)
         {
-            this.apiConnecteur.EnvoyerEvenementAsync(new CaisseClientEvt(this.NumeroCaisse, _numeroClient, _evenementClientType.ToString()));
+            this.apiConnecteur.EnvoyerEvenement(new CaisseClientEvt(this.NumeroCaisse, _numeroClient, _evenementClientType.ToString()));
         }
 
         #endregion

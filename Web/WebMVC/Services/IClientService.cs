@@ -6,8 +6,9 @@ namespace WebMVC.Services
 {
     public interface IClientService
     {
-        Task<IEnumerable<string>> DonneClients();
 
-        Task<ClientDTO> DonneClient(string id);
+        IEnumerable<string> DonneClients();
+
+        ClientDTO DonneClient(string id);
     }
 }
