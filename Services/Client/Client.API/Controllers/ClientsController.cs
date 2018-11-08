@@ -22,9 +22,9 @@ namespace Client.API.Controllers
         // GET api/values
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<string>))]
-        public async Task<ActionResult<IEnumerable<string>>> GetAsync()
+        public ActionResult<IEnumerable<string>> Get()
         {
-            IEnumerable<ClientItem> clientItems = await _clientsService.DonneClients();
+            IEnumerable<ClientItem> clientItems = _clientsService.DonneClients().Result;
             List<String> clientItemsId = clientItems.Select(x => x.Id.ToString()).ToList();
             return Ok(clientItemsId);
         }
@@ -34,13 +34,13 @@ namespace Client.API.Controllers
         [ProducesResponseType(200, Type = typeof(ClientItem))]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult<ClientItem>> GetAsync(string id)
+        public ActionResult<ClientItem> Get(string id)
         {
             // Vérification de/des argument(s).
             if (id == string.Empty) return BadRequest();
 
             // Recherche de l'élément demandé.
-            ClientItem clientItem = await _clientsService.DonneClient(id);
+            ClientItem clientItem = _clientsService.DonneClient(id).Result;
             if (clientItem == null) return NotFound();
 
             // Retour de l'élément.

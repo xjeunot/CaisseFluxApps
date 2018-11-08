@@ -7,8 +7,8 @@ namespace SimulateurApps.Services
 {
     public interface IApiConnecteur
     {
-        System.Threading.Tasks.Task<bool> EnvoyerEvenementAsync(CaisseEtatEvt caisseEtatEvt);
+        bool EnvoyerEvenement(CaisseEtatEvt caisseEtatEvt);
 
-        System.Threading.Tasks.Task<bool> EnvoyerEvenementAsync(CaisseClientEvt caisseClientEvt);
+        bool EnvoyerEvenement(CaisseClientEvt caisseClientEvt);
     }
 }
