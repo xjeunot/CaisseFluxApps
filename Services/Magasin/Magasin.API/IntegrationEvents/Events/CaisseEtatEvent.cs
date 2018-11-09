@@ -1,11 +1,12 @@
-﻿using System;
+﻿using BusEvenement.Evenement;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Magasin.API.IntegrationEvents.Events
 {
-    public class CaisseEtatEvent
+    public class CaisseEtatEvent : StandardEvenement
     {
         public string dateEvenement { get; set; }
 

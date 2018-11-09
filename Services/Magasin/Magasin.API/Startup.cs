@@ -2,6 +2,7 @@
 using Autofac.Extensions.DependencyInjection;
 using BusEvenement;
 using BusEvenement.Abstractions;
+using Magasin.API.IntegrationEvents.EventHandling;
 using Magasin.API.IntegrationEvents.Events;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -64,7 +65,7 @@ namespace Caisse.API
                     busEvenementAboManager, nombreTentative);
             });
             services.AddSingleton<IBusEvenementAboManager, BusEvenementAboManagerDefaut>();
-            //services.AddTransient<CaisseClientEventHandler>();
+            services.AddTransient<CaisseEtatEventHandler>();
 
             /*
              * Configuration de AutoFac.
@@ -92,7 +93,7 @@ namespace Caisse.API
 
             // Configuration des souscriptions sur le bus.
             var busEvenement = app.ApplicationServices.GetRequiredService<IBusEvenement>();
-            //busEvenement.Souscrire<CaisseClientEvent, CaisseClientEventHandler>();
+            busEvenement.Souscrire<CaisseEtatEvent, CaisseEtatEventHandler>();
             busEvenement.ActiverCanalConsommation();
         }
     }
