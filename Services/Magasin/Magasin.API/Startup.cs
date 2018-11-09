@@ -2,6 +2,7 @@
 using Autofac.Extensions.DependencyInjection;
 using BusEvenement;
 using BusEvenement.Abstractions;
+using Magasin.API.IntegrationEvents.Events;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -47,7 +48,23 @@ namespace Caisse.API
 
                 return new RabbitMQConnexionDefaut(factory, logger, nombreTentative);
             });
-            BusEvenementConfiguration(services);
+            services.AddSingleton<IBusEvenement, BusEvenementRabbitMQ>(sp =>
+            {
+                var rabbitMQConnexion = sp.GetRequiredService<IRabbitMQConnexion>();
+                var iLifetimeScope = sp.GetRequiredService<ILifetimeScope>();
+                var logger = sp.GetRequiredService<ILogger<BusEvenementRabbitMQ>>();
+                var busEvenementAboManager = sp.GetRequiredService<IBusEvenementAboManager>();
+
+                var nombreTentative = 5;
+                if ((Configuration.GetSection("RabbitMqBus:NombreTentative").Exists()) &&
+                    (!string.IsNullOrEmpty(Configuration.GetSection("RabbitMqBus:NombreTentative").Value)))
+                    nombreTentative = int.Parse(Configuration.GetSection("RabbitMqBus:NombreTentative").Value);
+
+                return new BusEvenementRabbitMQ(rabbitMQConnexion, logger, iLifetimeScope,
+                    busEvenementAboManager, nombreTentative);
+            });
+            services.AddSingleton<IBusEvenementAboManager, BusEvenementAboManagerDefaut>();
+            //services.AddTransient<CaisseClientEventHandler>();
 
             /*
              * Configuration de AutoFac.
@@ -74,47 +91,9 @@ namespace Caisse.API
             app.UseMvc();
 
             // Configuration des souscriptions sur le bus.
-            BusEvenementSouscription(app);
-        }
-
-        #region RabbitMQ
-
-        private void BusEvenementConfiguration(IServiceCollection services)
-        {
-            services.AddSingleton<IBusEvenement, BusEvenementRabbitMQ>(sp =>
-            {
-                var rabbitMQConnexion = sp.GetRequiredService<IRabbitMQConnexion>();
-                var iLifetimeScope = sp.GetRequiredService<ILifetimeScope>();
-                var logger = sp.GetRequiredService<ILogger<BusEvenementRabbitMQ>>();
-                var busEvenementAboManager = sp.GetRequiredService<IBusEvenementAboManager>();
-
-                var nombreTentative = 5;
-                if ((Configuration.GetSection("RabbitMqBus:NombreTentative").Exists()) &&
-                    (!string.IsNullOrEmpty(Configuration.GetSection("RabbitMqBus:NombreTentative").Value)))
-                    nombreTentative = int.Parse(Configuration.GetSection("RabbitMqBus:NombreTentative").Value);
-
-                return new BusEvenementRabbitMQ(rabbitMQConnexion, logger, iLifetimeScope,
-                    busEvenementAboManager, nombreTentative);
-            });
-            services.AddSingleton<IBusEvenementAboManager, BusEvenementAboManagerDefaut>();
-
-            /*
-             * Ajout des EventHandler bus en tant que service :
-             * > Résolution dans la gestion des évènements bus fait par AutoFac.
-             * > Peuvent recevoir les autres services (comme la BDD).
-             */
-            //services.AddTransient<ProductPriceChangedIntegrationEventHandler>();
-            //services.AddTransient<OrderStartedIntegrationEventHandler>();
-        }
-
-        private void BusEvenementSouscription(IApplicationBuilder app)
-        {
             var busEvenement = app.ApplicationServices.GetRequiredService<IBusEvenement>();
-
-            //busEvenement.Souscrire<ProductPriceChangedIntegrationEvent, ProductPriceChangedIntegrationEventHandler>();
-            //busEvenement.Souscrire<OrderStartedIntegrationEvent, OrderStartedIntegrationEventHandler>();
+            //busEvenement.Souscrire<CaisseClientEvent, CaisseClientEventHandler>();
+            busEvenement.ActiverCanalConsommation();
         }
-
-        #endregion
     }
 }

@@ -12,19 +12,21 @@ namespace SimulateurApps.Caisse
         private IApiConnecteur apiConnecteur;
         private double TempsAttenteClient;
         private double TempsTraitementClient;
-        protected int NombreClientMaximum;
+        protected int TempsOuverture;
 
         private EtatCaisse EtatCaisse;
 
         public CaisseImpl(int _numeroCaisse, IApiConnecteur _apiConnecteur,
             double _tempsAttenteClient, double _tempsTraitementClient,
-            int _nombreClientMaximum)
+            int _tempsOuverture)
         {
             this.NumeroCaisse = _numeroCaisse;
             this.apiConnecteur = _apiConnecteur;
             this.TempsAttenteClient = _tempsAttenteClient;
             this.TempsTraitementClient = _tempsTraitementClient;
-            this.NombreClientMaximum = _nombreClientMaximum;
+            this.TempsOuverture = _tempsOuverture;
+
+            this.EtatCaisse = EtatCaisse.Ferme;
         }
 
         #region Traitement
@@ -34,11 +36,20 @@ namespace SimulateurApps.Caisse
             // On ouvre la caisse.
             this.OuvertureCaisse();
 
+            // Depart chronomètre ouverture caisse.
+            DateTime dtmDateOuverture = DateTime.Now;
+            DateTime dtmDateFermeture = dtmDateOuverture.AddSeconds(this.TempsOuverture);
+
             // Boucle de traitement.
             while (this.EtatCaisse != EtatCaisse.Ferme)
             {
                 // Prochain client.
                 string strClientSuivant = this.DonneClientSuivant();
+
+                // On contrôle si la caisse ne doit pas fermé.
+                if (dtmDateFermeture <= DateTime.Now) {
+                    this.DernierClient();
+                }
 
                 // Cas de client dans l'immédiat.
                 if (strClientSuivant == string.Empty)
@@ -63,7 +74,10 @@ namespace SimulateurApps.Caisse
 
         private string DonneClientSuivant()
         {
-            return $"Client_{DateTime.Now.Second}{DateTime.Now.Millisecond}";
+            if (this.EtatCaisse == EtatCaisse.Ouverte)
+                return $"Client_{DateTime.Now.Second}{DateTime.Now.Millisecond}";
+            else
+                return String.Empty;
         }
 
         #endregion
@@ -113,7 +127,7 @@ namespace SimulateurApps.Caisse
         {
             this.apiConnecteur.EnvoyerEvenement(new CaisseClientEvt(this.NumeroCaisse, _numeroClient, _evenementClientType.ToString()));
         }
-
+    
         #endregion
     }
 

@@ -12,7 +12,7 @@ namespace Client.API.Bdd.Interfaces
 
         Task<Models.ClientItem> RechercherClientUniqueAvecNom(string nom);
 
-        Task AjouterClient(Models.ClientItem model);
+        void AjouterClient(Models.ClientItem model);
 
         Task<bool> MajClient(Models.ClientItem model);
 

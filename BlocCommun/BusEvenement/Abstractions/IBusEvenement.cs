@@ -6,6 +6,8 @@ namespace BusEvenement.Abstractions
     {
         void Publier(StandardEvenement @evenement);
 
+        void ActiverCanalConsommation();
+
         void Souscrire<T, TH>()
             where T : StandardEvenement
             where TH : IStandardEvenementHandler<T>;

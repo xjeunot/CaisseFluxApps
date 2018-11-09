@@ -44,9 +44,9 @@ namespace Client.API.Bdd.Services
             return await Collection().Find(filtre).FirstOrDefaultAsync();
         }
 
-        public async Task AjouterClient(Models.ClientItem model)
+        public void AjouterClient(Models.ClientItem model)
         {
-            await Collection().InsertOneAsync(model);
+            Collection().InsertOne(model);
         }
 
         public async Task<bool> MajClient(Models.ClientItem model)

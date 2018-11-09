@@ -21,6 +21,7 @@ namespace RabbitMQBus
     public class BusEvenementRabbitMQ : IBusEvenement, IDisposable
     {
         const string NOM_BROKER = "caissefluxapps_evenement_bus";
+        const string NOM_QUEUE = "q_caissefluxapps";
 
         private readonly string AUTOFAC_NOM_SCOPE = "caissefluxapps_evenement_bus";
 
@@ -31,7 +32,6 @@ namespace RabbitMQBus
         private readonly int _nbEssai;
 
         private IModel _cannalConsommation;
-        private string _NomQueue;
 
         public BusEvenementRabbitMQ(IRabbitMQConnexion ConnexionPersistente, ILogger<BusEvenementRabbitMQ> logger,
             ILifetimeScope autofac, IBusEvenementAboManager subsManager, int nbEssai = 5)
@@ -39,10 +39,14 @@ namespace RabbitMQBus
             _ConnexionPersistente = ConnexionPersistente ?? throw new ArgumentNullException(nameof(ConnexionPersistente));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _subsManager = subsManager ?? new BusEvenementAboManagerDefaut();
-            _cannalConsommation = CreerCanalConsommation();
             _autofac = autofac;
             _nbEssai = nbEssai;
             _subsManager.EstEvenementSupprime += SubsManager_EstEvenementSupprime;
+        }
+
+        void IBusEvenement.ActiverCanalConsommation()
+        {
+            this._cannalConsommation = this.CreerCanalConsommation();
         }
 
         void IBusEvenement.Publier(StandardEvenement evenement)
@@ -65,16 +69,19 @@ namespace RabbitMQBus
                     .Name;
 
                 channel.ExchangeDeclare(exchange: NOM_BROKER,
-                                    type: "direct");
+                                    type: "direct",
+                                    durable: true);
 
                 var message = JsonConvert.SerializeObject(evenement);
                 var body = Encoding.UTF8.GetBytes(message);
+                var props = channel.CreateBasicProperties();
+                props.DeliveryMode = 2;
 
                 policy.Execute(() =>
                 {
                     channel.BasicPublish(exchange: NOM_BROKER,
                                      routingKey: eventName,
-                                     basicProperties: null,
+                                     basicProperties: props,
                                      body: body);
                 });
             }
@@ -122,7 +129,7 @@ namespace RabbitMQBus
 
                 using (var cannal = _ConnexionPersistente.CreateModel())
                 {
-                    cannal.QueueBind(queue: _NomQueue,
+                    cannal.QueueBind(queue: NOM_QUEUE,
                                       exchange: NOM_BROKER,
                                       routingKey: nomEvenement);
                 }
@@ -138,13 +145,12 @@ namespace RabbitMQBus
 
             using (var cannal = _ConnexionPersistente.CreateModel())
             {
-                cannal.QueueUnbind(queue: _NomQueue,
+                cannal.QueueUnbind(queue: NOM_QUEUE,
                     exchange: NOM_BROKER,
                     routingKey: eventName);
 
                 if (_subsManager.EstVide)
                 {
-                    _NomQueue = string.Empty;
                     _cannalConsommation.Close();
                 }
             }
@@ -157,20 +163,23 @@ namespace RabbitMQBus
                 _ConnexionPersistente.EssaiConnexion();
             }
             var cannal = _ConnexionPersistente.CreateModel();
-            cannal.ExchangeDeclare(exchange: NOM_BROKER, type: "direct");
-
-            _NomQueue = cannal.QueueDeclare().QueueName;
+            cannal.ExchangeDeclare(exchange: NOM_BROKER, type: "direct", durable: true);
 
             var consommateur = new EventingBasicConsumer(cannal);
-            consommateur.Received += async (model, ea) =>
+            consommateur.Received += (model, ea) =>
             {
                 var nomEvenement = ea.RoutingKey;
                 var message = Encoding.UTF8.GetString(ea.Body);
 
-                await ProcessEvent(nomEvenement, message);
+                bool blnEstMessageConsommer = ProcessEvent(nomEvenement, message).Result;
+
+                if (blnEstMessageConsommer)
+                    cannal.BasicAck(ea.DeliveryTag, false);
+                else
+                    cannal.BasicNack(ea.DeliveryTag, false, true);
             };
 
-            cannal.BasicConsume(queue: _NomQueue, autoAck: false, consumer: consommateur);
+            cannal.BasicConsume(queue: NOM_QUEUE, autoAck: false, consumer: consommateur);
             cannal.CallbackException += (sender, ea) =>
             {
                 _cannalConsommation.Dispose();
@@ -180,7 +189,7 @@ namespace RabbitMQBus
             return cannal;
         }
 
-        private async Task ProcessEvent(string nomEvenement, string message)
+        private async Task<bool> ProcessEvent(string nomEvenement, string message)
         {
             if (_subsManager.ExisteSouscriptionPourEvenement(nomEvenement))
             {
@@ -205,7 +214,10 @@ namespace RabbitMQBus
                         }
                     }
                 }
+                return true;
             }
+            else
+                return false;
         }
     }
 }

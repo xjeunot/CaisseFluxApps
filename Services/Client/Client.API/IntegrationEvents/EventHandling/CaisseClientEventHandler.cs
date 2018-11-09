@@ -10,6 +10,7 @@ namespace Client.API.IntegrationEvents.EventHandling
     public class CaisseClientEventHandler : IStandardEvenementHandler<CaisseClientEvent>
     {
         private readonly IClientsService _clientService;
+
         public CaisseClientEventHandler(IClientsService clientService)
         {
             _clientService = clientService ?? throw new ArgumentNullException(nameof(clientService));
@@ -19,6 +20,7 @@ namespace Client.API.IntegrationEvents.EventHandling
         {
             // On recherche si le client existe.
             ClientItem clientItem = _clientService.RechercherClientUniqueAvecNom(@event.nomClient).Result;
+
             // Le client n'existe pas : on le creer.
             if (clientItem == null)
             {
@@ -26,8 +28,9 @@ namespace Client.API.IntegrationEvents.EventHandling
                 {
                     Nom = @event.nomClient
                 };
-                bool blnOk = _clientService.AjouterClient(clientItem).IsCompleted;
+                _clientService.AjouterClient(clientItem);
             }
+
             // Le client arrive.
             if (@event.evenementClientTypeCourant == "DebutClient")
             {
@@ -35,6 +38,7 @@ namespace Client.API.IntegrationEvents.EventHandling
                 clientItem.NombreVisite++;
                 await _clientService.MajClient(clientItem);
             }
+
             // Le client part. 
             if (@event.evenementClientTypeCourant == "FinClient")
             {
