@@ -16,24 +16,24 @@ namespace Magasin.API.IntegrationEvents.EventHandling
         public async Task Handle(CaisseEtatEvent @event)
         {/*
             // On recherche si le client existe.
-            ClientItem clientItem = _clientService.RechercherClientUniqueAvecNom(@event.nomClient).Result;
+            CaissesItem CaissesItem = _clientService.RechercherClientUniqueAvecNom(@event.nomClient).Result;
 
             // Le client n'existe pas : on le creer.
-            if (clientItem == null)
+            if (CaissesItem == null)
             {
-                clientItem = new ClientItem()
+                CaissesItem = new CaissesItem()
                 {
                     Nom = @event.nomClient
                 };
-                _clientService.AjouterClient(clientItem);
+                _clientService.AjouterClient(CaissesItem);
             }
 
             // Le client arrive.
             if (@event.evenementClientTypeCourant == "DebutClient")
             {
-                clientItem.DateDerniereVisite = new DateTime(long.Parse(@event.dateEvenement));
-                clientItem.NombreVisite++;
-                await _clientService.MajClient(clientItem);
+                CaissesItem.DateDerniereVisite = new DateTime(long.Parse(@event.dateEvenement));
+                CaissesItem.NombreVisite++;
+                await _clientService.MajClient(CaissesItem);
             }
 
             // Le client part. 
