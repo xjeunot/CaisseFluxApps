@@ -1,6 +1,4 @@
-﻿using System.Security;
-
-namespace Client.API.Bdd.Connexion
+﻿namespace Magasin.API.Bdd.Connexion
 {
     public class MongoDbConfig
     {

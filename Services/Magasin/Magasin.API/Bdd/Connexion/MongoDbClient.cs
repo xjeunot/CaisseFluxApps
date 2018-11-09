@@ -4,7 +4,7 @@ using MongoDB.Driver;
 using System;
 using System.IO;
 
-namespace Client.API.Bdd.Connexion
+namespace Magasin.API.Bdd.Connexion
 {
     public class MongoDbClient : IMongoDbClient
     {

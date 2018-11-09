@@ -1,7 +1,7 @@
 ﻿using MongoDB.Driver;
 using System;
 
-namespace Client.API.Bdd.Connexion
+namespace Magasin.API.Bdd.Connexion
 {
     public interface IMongoDbClient : IDisposable
     {
