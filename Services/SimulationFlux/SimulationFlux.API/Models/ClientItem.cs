@@ -1,12 +1,10 @@
 ﻿namespace SimulationFlux.API.Models
 {
-    public class CaisseClientItem
+    public class ClientItem
     {
         public string dateEvenement { get; set; }
 
-        public int numero { get; set; }
-
-        public string nomClient { get; set; }
+        public string nom { get; set; }
 
         public string evenementClientTypeCourant { get; set; }
     }
