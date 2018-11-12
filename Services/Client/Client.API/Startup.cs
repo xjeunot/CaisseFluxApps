@@ -69,7 +69,7 @@ namespace Client.API
                     busEvenementAboManager, nombreTentative);
             });
             services.AddSingleton<IBusEvenementAboManager, BusEvenementAboManagerDefaut>();
-            services.AddTransient<CaisseClientEventHandler>();
+            services.AddTransient<ClientEventHandler>();
 
             /*
              * Configuration de MongoDB.
@@ -119,7 +119,7 @@ namespace Client.API
 
             // Configuration des souscriptions sur le bus.
             var busEvenement = app.ApplicationServices.GetRequiredService<IBusEvenement>();
-            busEvenement.Souscrire<CaisseClientEvent, CaisseClientEventHandler>();
+            busEvenement.Souscrire<ClientEvent, ClientEventHandler>();
             busEvenement.ActiverCanalConsommation();
         }
     }

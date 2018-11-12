@@ -51,18 +51,21 @@ namespace Client.API.Controllers
         [HttpPost]
         public void Post([FromBody] ClientItem value)
         {
+            //TODO : a faire
         }
 
         // PUT api/values/5
         [HttpPut("{id}")]
         public void Put(string id, [FromBody] ClientItem value)
         {
+            //TODO : a faire
         }
 
         // DELETE api/values/5
         [HttpDelete("{id}")]
         public void Delete(string id)
         {
+            //TODO : a faire
         }
     }
 }

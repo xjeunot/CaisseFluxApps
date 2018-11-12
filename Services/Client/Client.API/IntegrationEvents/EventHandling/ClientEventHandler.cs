@@ -7,26 +7,26 @@ using Client.API.Models;
 
 namespace Client.API.IntegrationEvents.EventHandling
 {
-    public class CaisseClientEventHandler : IStandardEvenementHandler<CaisseClientEvent>
+    public class ClientEventHandler : IStandardEvenementHandler<ClientEvent>
     {
         private readonly IClientsService _clientService;
 
-        public CaisseClientEventHandler(IClientsService clientService)
+        public ClientEventHandler(IClientsService clientService)
         {
             _clientService = clientService ?? throw new ArgumentNullException(nameof(clientService));
         }
 
-        public async Task Handle(CaisseClientEvent @event)
+        public async Task Handle(ClientEvent @event)
         {
             // On recherche si le client existe.
-            ClientItem clientItem = _clientService.RechercherClientUniqueAvecNom(@event.nomClient).Result;
+            ClientItem clientItem = _clientService.RechercherClientUniqueAvecNom(@event.nom).Result;
 
             // Le client n'existe pas : on le creer.
             if (clientItem == null)
             {
                 clientItem = new ClientItem()
                 {
-                    Nom = @event.nomClient
+                    Nom = @event.nom
                 };
                 _clientService.AjouterClient(clientItem);
             }
