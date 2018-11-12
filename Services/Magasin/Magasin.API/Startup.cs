@@ -65,6 +65,7 @@ namespace Caisse.API
                     busEvenementAboManager, nombreTentative);
             });
             services.AddSingleton<IBusEvenementAboManager, BusEvenementAboManagerDefaut>();
+            services.AddTransient<CaisseClientEventHandler>();
             services.AddTransient<CaisseEtatEventHandler>();
 
             /*
@@ -93,6 +94,7 @@ namespace Caisse.API
 
             // Configuration des souscriptions sur le bus.
             var busEvenement = app.ApplicationServices.GetRequiredService<IBusEvenement>();
+            busEvenement.Souscrire<CaisseClientEvent, CaisseClientEventHandler>();
             busEvenement.Souscrire<CaisseEtatEvent, CaisseEtatEventHandler>();
             busEvenement.ActiverCanalConsommation();
         }
