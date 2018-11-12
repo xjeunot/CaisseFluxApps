@@ -1,6 +1,9 @@
 ﻿using BusEvenement.Abstractions;
+using Magasin.API.Bdd.Interfaces;
 using Magasin.API.IntegrationEvents.Events;
+using Magasin.API.Models;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Magasin.API.IntegrationEvents.EventHandling
@@ -15,7 +18,7 @@ namespace Magasin.API.IntegrationEvents.EventHandling
         }
 
         public async Task Handle(CaisseClientEvent @event)
-        {/*
+        {
             // On recherche si la caisse existe.
             CaisseItem caisseItem = _caisseService.RechercherCaisseUniqueAvecNumero(@event.numero).Result;
 
@@ -29,35 +32,32 @@ namespace Magasin.API.IntegrationEvents.EventHandling
                 _caisseService.AjouterCaisse(caisseItem);
             }
 
+            // Recherche de la session en cours.
+            long lgTicks = long.Parse(@event.dateEvenement);
+            CaisseSessionItem caisseSessionItem = caisseItem.Sessions
+                .Where(x => x.DateFermeture == DateTime.MinValue)
+                .SingleOrDefault();
+
             // Mise à jour de l'état de la caisse suivant le cas.
-            if (@event.etatCaisseCourant == "Ouverte")
+            if (@event.evenementClientTypeCourant == "DebutClient")
             {
-                long lgTicks = long.Parse(@event.dateEvenement);
-                CaisseSessionItem caisseSessionItem = new CaisseSessionItem()
+                CaisseClientItem caisseClientItem = new CaisseClientItem()
                 {
-                    DateOuverture = new DateTime(lgTicks)
+                    NomClient = @event.nomClient,
+                    DateDebutClient = new DateTime(lgTicks)
                 };
-                caisseItem.Sessions.Add(caisseSessionItem);
+                caisseSessionItem.Clients.Add(caisseClientItem);
             }
-            if (@event.etatCaisseCourant == "DernierClient")
+            if (@event.evenementClientTypeCourant == "FinClient")
             {
-                long lgTicks = long.Parse(@event.dateEvenement);
-                CaisseSessionItem caisseSessionItem = caisseItem.Sessions
-                    .Where(x => x.DateFermeture == DateTime.MinValue)
+                CaisseClientItem caisseClientItem = caisseSessionItem.Clients
+                    .Where(x => x.DateFinClient == DateTime.MinValue)
                     .SingleOrDefault();
-                caisseSessionItem.DateDernierClient = new DateTime(lgTicks);
-            }
-            if (@event.etatCaisseCourant == "Ferme")
-            {
-                long lgTicks = long.Parse(@event.dateEvenement);
-                CaisseSessionItem caisseSessionItem = caisseItem.Sessions
-                    .Where(x => x.DateFermeture == DateTime.MinValue)
-                    .SingleOrDefault();
-                caisseSessionItem.DateFermeture = new DateTime(lgTicks);
+                caisseClientItem.DateFinClient = new DateTime(lgTicks);
             }
 
             // Sauvegarde.
-            await _caisseService.MajCaisse(caisseItem);*/
+            await _caisseService.MajCaisse(caisseItem);
         }
     }
 }

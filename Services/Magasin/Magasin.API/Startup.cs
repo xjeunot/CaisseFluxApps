@@ -2,6 +2,9 @@
 using Autofac.Extensions.DependencyInjection;
 using BusEvenement;
 using BusEvenement.Abstractions;
+using Magasin.API.Bdd.Connexion;
+using Magasin.API.Bdd.Interfaces;
+using Magasin.API.Bdd.Services;
 using Magasin.API.IntegrationEvents.EventHandling;
 using Magasin.API.IntegrationEvents.Events;
 using Microsoft.AspNetCore.Builder;
@@ -10,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 using RabbitMQBus;
 using RabbitMQBus.Connection;
@@ -67,6 +71,28 @@ namespace Caisse.API
             services.AddSingleton<IBusEvenementAboManager, BusEvenementAboManagerDefaut>();
             services.AddTransient<CaisseClientEventHandler>();
             services.AddTransient<CaisseEtatEventHandler>();
+
+            /*
+             * Configuration de MongoDB.
+             */
+            services.Configure<MongoDbConfig>(Options =>
+            {
+                Options.ChaineConnexion = Configuration.GetSection("MongoDbConfig:ChaineConnexion").Value;
+                Options.BaseDeDonnees = Configuration.GetSection("MongoDbConfig:BaseDeDonnees").Value;
+
+                Options.Utilisateur = Configuration.GetSection("MongoDbConfig:Utilisateur").Value;
+                Options.MotDePasse = Configuration.GetSection("MongoDbConfig:MDP").Value;
+            });
+            services.AddSingleton<IMongoDbClient>(sp =>
+            {
+                ILogger<MongoDbClient> logger = sp.GetRequiredService<ILogger<MongoDbClient>>();
+                IOptions<MongoDbConfig> options = sp.GetRequiredService<IOptions<MongoDbConfig>>();
+                return new MongoDbClient(options, logger);
+            });
+            services.AddSingleton<ICaissesService>(sp =>
+            {
+                return new CaissesService(sp.GetRequiredService<IMongoDbClient>());
+            });
 
             /*
              * Configuration de AutoFac.

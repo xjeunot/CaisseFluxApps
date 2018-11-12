@@ -51,7 +51,7 @@ namespace Magasin.API.Bdd.Connexion
         {
             if (!EstConnecte)
             {
-                _logger.LogCritical("Action impossible : Aucune connexion a RabbitMQ");
+                _logger.LogCritical("Action impossible : Aucune connexion a MongoDB");
                 return null;
             }
             return _client.GetDatabase(_settings.Value.BaseDeDonnees);

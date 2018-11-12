@@ -43,7 +43,7 @@ namespace SimulateurApps.Caisse
             while (this.EtatCaisse != EtatCaisse.Ferme)
             {
                 // Prochain client.
-                string strClientSuivant = this.DonneClientSuivant();
+                string strClientEnCours = this.DonneClientSuivant();
 
                 // On contrôle si la caisse ne doit pas fermé.
                 if (dtmDateFermeture <= DateTime.Now) {
@@ -51,7 +51,7 @@ namespace SimulateurApps.Caisse
                 }
 
                 // Cas de client dans l'immédiat.
-                if (strClientSuivant == string.Empty)
+                if (strClientEnCours == string.Empty)
                 {
                     // Caisse ouverte : on attend.
                     if (this.EtatCaisse == EtatCaisse.Ouverte)
@@ -64,13 +64,13 @@ namespace SimulateurApps.Caisse
                 // Traitement du client courant.
                 else
                 {
-                    this.EvenementCaisseClient(strClientSuivant, EvenementClientType.DebutClient);
-                    this.EvenementClient(strClientSuivant, EvenementClientType.DebutClient);
+                    this.EvenementCaisseClient(strClientEnCours, EvenementClientType.DebutClient);
+                    this.EvenementClient(strClientEnCours, EvenementClientType.DebutClient);
 
                     Thread.Sleep(TimeSpan.FromSeconds(this.TempsTraitementClient));
 
-                    this.EvenementCaisseClient(strClientSuivant, EvenementClientType.FinClient);
-                    this.EvenementClient(strClientSuivant, EvenementClientType.FinClient);
+                    this.EvenementCaisseClient(strClientEnCours, EvenementClientType.FinClient);
+                    this.EvenementClient(strClientEnCours, EvenementClientType.FinClient);
                 }
             }
         }
