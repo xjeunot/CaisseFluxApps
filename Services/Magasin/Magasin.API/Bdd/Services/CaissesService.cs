@@ -1,4 +1,5 @@
 ﻿using Magasin.API.Bdd.Connexion;
+using Magasin.API.Bdd.Interfaces;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using System.Collections.Generic;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Magasin.API.Bdd.Services
 {
-    public class CaissesService
+    public class CaissesService : ICaissesService
     {
         private readonly IMongoDbClient _client = null;
 
@@ -15,61 +16,61 @@ namespace Magasin.API.Bdd.Services
             _client = client;
         }
 
-        public IMongoCollection<Models.CaissesItem> Collection()
+        public IMongoCollection<Models.CaisseItem> Collection()
         {
             if (!_client.EstConnecte)
                 _client.EssaiConnexion();
             IMongoDatabase iMongoDatabase = _client.DonneDatabase();
-            return iMongoDatabase.GetCollection<Models.CaissesItem>("caisses");
+            return iMongoDatabase.GetCollection<Models.CaisseItem>("caisses");
         }
 
-        public async Task<IEnumerable<Models.CaissesItem>> DonneCaisses()
+        public async Task<IEnumerable<Models.CaisseItem>> DonneCaisses()
         {
             return await Collection().Find(x => true).ToListAsync();
         }
 
-        public async Task<Models.CaissesItem> DonneCaisse(string id)
+        public async Task<Models.CaisseItem> DonneCaisse(string id)
         {
             ObjectId objectId;
             if (!ObjectId.TryParse(id, out objectId)) return null;
 
-            var filtre = Builders<Models.CaissesItem>.Filter.Eq("Id", objectId);
+            var filtre = Builders<Models.CaisseItem>.Filter.Eq("Id", objectId);
             return await Collection().Find(filtre).FirstOrDefaultAsync();
         }
 
-        public async Task<Models.CaissesItem> RechercherCaisseUniqueAvecNom(string nom)
+        public async Task<Models.CaisseItem> RechercherCaisseUniqueAvecNumero(int numero)
         {
-            var filtre = Builders<Models.CaissesItem>.Filter.Eq("Nom", nom);
+            var filtre = Builders<Models.CaisseItem>.Filter.Eq("Numero", numero);
             return await Collection().Find(filtre).FirstOrDefaultAsync();
         }
 
-        public void AjouterCaisse(Models.CaissesItem model)
+        public void AjouterCaisse(Models.CaisseItem model)
         {
             Collection().InsertOne(model);
         }
 
-        public async Task<bool> MajCaisse(Models.CaissesItem model)
+        public async Task<bool> MajCaisse(Models.CaisseItem model)
         {
-            /*var filtre = Builders<Models.CaissesItem>.Filter.Eq("Nom", model.Nom);
+            var filtre = Builders<Models.CaisseItem>.Filter.Eq("Numero", model.Numero);
             var client = Collection().Find(filtre).FirstOrDefaultAsync();
             if (client.Result == null)
                 return false;
 
-            var miseAJour = Builders<Models.CaissesItem>.Update
-                                          .Set(x => x.DateDerniereVisite, model.DateDerniereVisite)
-                                          .Set(x => x.NombreVisite, model.NombreVisite);
+            var miseAJour = Builders<Models.CaisseItem>.Update
+                                          .Set(x => x.Numero, model.Numero)
+                                          .Set(x => x.Sessions, model.Sessions);
 
-            await Collection().UpdateOneAsync(filtre, miseAJour);*/
+            await Collection().UpdateOneAsync(filtre, miseAJour);
             return true;
         }
 
         public async Task<DeleteResult> DetruireCaisse(string id)
         {
-            var filtre = Builders<Models.CaissesItem>.Filter.Eq("Id", id);
+            var filtre = Builders<Models.CaisseItem>.Filter.Eq("Id", id);
             return await Collection().DeleteOneAsync(filtre);
         }
 
-        public async Task<DeleteResult> DetruireTousCaisses()
+        public async Task<DeleteResult> DetruireToutesCaisses()
         {
             return await Collection().DeleteManyAsync(new BsonDocument());
         }

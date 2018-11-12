@@ -1,45 +1,66 @@
 ﻿using BusEvenement.Abstractions;
+using Magasin.API.Bdd.Interfaces;
 using Magasin.API.IntegrationEvents.Events;
+using Magasin.API.Models;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Magasin.API.IntegrationEvents.EventHandling
 {
     public class CaisseEtatEventHandler : IStandardEvenementHandler<CaisseEtatEvent>
     {
-        //private readonly IClientsService _clientService;
+        private readonly ICaissesService _caisseService;
 
-        public CaisseEtatEventHandler(/*IClientsService clientService*/)
+        public CaisseEtatEventHandler(ICaissesService caisseService)
         {
-            //_clientService = clientService ?? throw new ArgumentNullException(nameof(clientService));
+            _caisseService = caisseService ?? throw new ArgumentNullException(nameof(caisseService));
         }
 
         public async Task Handle(CaisseEtatEvent @event)
-        {/*
-            // On recherche si le client existe.
-            CaissesItem CaissesItem = _clientService.RechercherClientUniqueAvecNom(@event.nomClient).Result;
+        {
+            // On recherche si la caisse existe.
+            CaisseItem caisseItem = _caisseService.RechercherCaisseUniqueAvecNumero(@event.numero).Result;
 
-            // Le client n'existe pas : on le creer.
-            if (CaissesItem == null)
+            // La caisse n'existe pas : on la creer.
+            if (caisseItem == null)
             {
-                CaissesItem = new CaissesItem()
+                caisseItem = new CaisseItem()
                 {
-                    Nom = @event.nomClient
+                    Numero = @event.numero
                 };
-                _clientService.AjouterClient(CaissesItem);
+                _caisseService.AjouterCaisse(caisseItem);
             }
 
-            // Le client arrive.
-            if (@event.evenementClientTypeCourant == "DebutClient")
+            // Mise à jour de l'état de la caisse suivant le cas.
+            if (@event.etatCaisseCourant == "Ouverte")
             {
-                CaissesItem.DateDerniereVisite = new DateTime(long.Parse(@event.dateEvenement));
-                CaissesItem.NombreVisite++;
-                await _clientService.MajClient(CaissesItem);
+                long lgTicks = long.Parse(@event.dateEvenement);
+                CaisseSessionItem caisseSessionItem = new CaisseSessionItem()
+                {
+                    DateOuverture = new DateTime(lgTicks)
+                };
+                caisseItem.Sessions.Add(caisseSessionItem);
+            }
+            if (@event.etatCaisseCourant == "DernierClient")
+            {
+                long lgTicks = long.Parse(@event.dateEvenement);
+                CaisseSessionItem caisseSessionItem = caisseItem.Sessions
+                    .Where(x => x.DateFermeture == DateTime.MinValue)
+                    .SingleOrDefault();
+                caisseSessionItem.DateDernierClient = new DateTime(lgTicks);
+            }
+            if (@event.etatCaisseCourant == "Ferme")
+            {
+                long lgTicks = long.Parse(@event.dateEvenement);
+                CaisseSessionItem caisseSessionItem = caisseItem.Sessions
+                    .Where(x => x.DateFermeture == DateTime.MinValue)
+                    .SingleOrDefault();
+                caisseSessionItem.DateFermeture = new DateTime(lgTicks);
             }
 
-            // Le client part. 
-            if (@event.evenementClientTypeCourant == "FinClient")
-            {
-            }*/
+            // Sauvegarde.
+            await _caisseService.MajCaisse(caisseItem);
         }
     }
 }

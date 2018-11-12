@@ -6,18 +6,18 @@ namespace Magasin.API.Bdd.Interfaces
 {
     public interface ICaissesService
     {
-        Task<IEnumerable<Models.CaissesItem>> DonneCaisses();
+        Task<IEnumerable<Models.CaisseItem>> DonneCaisses();
 
-        Task<Models.CaissesItem> DonneCaisse(string id);
+        Task<Models.CaisseItem> DonneCaisse(string id);
 
-        Task<Models.CaissesItem> RechercherCaisseUniqueAvecNom(string nom);
+        Task<Models.CaisseItem> RechercherCaisseUniqueAvecNumero(int numero);
 
-        void AjouterCaisse(Models.CaissesItem model);
+        void AjouterCaisse(Models.CaisseItem model);
 
-        Task<bool> MajCaisse(Models.CaissesItem model);
+        Task<bool> MajCaisse(Models.CaisseItem model);
 
         Task<DeleteResult> DetruireCaisse(string id);
 
-        Task<DeleteResult> DetruireTousCaisses();
+        Task<DeleteResult> DetruireToutesCaisses();
     }
 }
