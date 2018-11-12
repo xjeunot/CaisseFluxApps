@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SimulateurApps.Evenements
 {
     public class CaisseClientEvt
     {
-        public String dateEvenement { get; internal set; }
+        public string dateEvenement { get; internal set; }
 
         public int numero { get; internal set; }
 

@@ -7,8 +7,10 @@ namespace SimulateurApps.Services
 {
     public interface IApiConnecteur
     {
+        bool EnvoyerEvenement(CaisseClientEvt caisseClientEvt);
+
         bool EnvoyerEvenement(CaisseEtatEvt caisseEtatEvt);
 
-        bool EnvoyerEvenement(CaisseClientEvt caisseClientEvt);
+        bool EnvoyerEvenement(ClientEvt clientEvt);
     }
 }

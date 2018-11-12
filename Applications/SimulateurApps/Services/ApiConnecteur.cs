@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Text;
 using Newtonsoft.Json;
 using SimulateurApps.Evenements;
@@ -16,6 +14,18 @@ namespace SimulateurApps.Services
             _httpClientFactory = httpClientFactory;
         }
 
+        public bool EnvoyerEvenement(CaisseClientEvt caisseClientEvt)
+        {
+            var client = _httpClientFactory.CreateClient("ApiSimulationFluxV1");
+            string strUrl = "/api/v1/CaisseClient";
+
+            var clsObjetRequete = new StringContent(JsonConvert.SerializeObject(caisseClientEvt), Encoding.UTF8, "application/json");
+
+            var reponse = client.PostAsync(strUrl, clsObjetRequete).Result;
+
+            return reponse.IsSuccessStatusCode;
+        }
+
         public bool EnvoyerEvenement(CaisseEtatEvt caisseEtatEvt)
         {
             var client = _httpClientFactory.CreateClient("ApiSimulationFluxV1");
@@ -28,12 +38,12 @@ namespace SimulateurApps.Services
             return reponse.IsSuccessStatusCode;
         }
 
-        public bool EnvoyerEvenement(CaisseClientEvt caisseClientEvt)
+        public bool EnvoyerEvenement(ClientEvt clientEvt)
         {
             var client = _httpClientFactory.CreateClient("ApiSimulationFluxV1");
-            string strUrl = "/api/v1/CaisseClient";
+            string strUrl = "/api/v1/Client";
 
-            var clsObjetRequete = new StringContent(JsonConvert.SerializeObject(caisseClientEvt), Encoding.UTF8, "application/json");
+            var clsObjetRequete = new StringContent(JsonConvert.SerializeObject(clientEvt), Encoding.UTF8, "application/json");
 
             var reponse = client.PostAsync(strUrl, clsObjetRequete).Result;
 

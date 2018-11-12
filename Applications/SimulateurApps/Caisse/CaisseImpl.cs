@@ -1,7 +1,6 @@
 ﻿using SimulateurApps.Evenements;
 using SimulateurApps.Services;
 using System;
-using System.Collections.Generic;
 using System.Threading;
 
 namespace SimulateurApps.Caisse
@@ -65,8 +64,12 @@ namespace SimulateurApps.Caisse
                 // Traitement du client courant.
                 else
                 {
+                    this.EvenementCaisseClient(strClientSuivant, EvenementClientType.DebutClient);
                     this.EvenementClient(strClientSuivant, EvenementClientType.DebutClient);
+
                     Thread.Sleep(TimeSpan.FromSeconds(this.TempsTraitementClient));
+
+                    this.EvenementCaisseClient(strClientSuivant, EvenementClientType.FinClient);
                     this.EvenementClient(strClientSuivant, EvenementClientType.FinClient);
                 }
             }
@@ -90,7 +93,7 @@ namespace SimulateurApps.Caisse
             if (this.EtatCaisse == EtatCaisse.Ferme)
             {
                 this.EtatCaisse = EtatCaisse.Ouverte;
-                EvenementEtatCaisse();
+                EvenementCaisseEtat();
             }
         }
 
@@ -100,7 +103,7 @@ namespace SimulateurApps.Caisse
             if (this.EtatCaisse == EtatCaisse.Ouverte)
             {
                 this.EtatCaisse = EtatCaisse.DernierClient;
-                EvenementEtatCaisse();
+                EvenementCaisseEtat();
             }
         }
 
@@ -110,7 +113,7 @@ namespace SimulateurApps.Caisse
             if (this.EtatCaisse == EtatCaisse.DernierClient)
             {
                 this.EtatCaisse = EtatCaisse.Ferme;
-                EvenementEtatCaisse();
+                EvenementCaisseEtat();
             }
         }
 
@@ -118,14 +121,19 @@ namespace SimulateurApps.Caisse
 
         #region Evenements
 
-        private void EvenementEtatCaisse()
+        private void EvenementCaisseClient(string _numeroClient, EvenementClientType _evenementClientType)
+        {
+            this.apiConnecteur.EnvoyerEvenement(new CaisseClientEvt(this.NumeroCaisse, _numeroClient, _evenementClientType.ToString()));
+        }
+
+        private void EvenementCaisseEtat()
         {
             this.apiConnecteur.EnvoyerEvenement(new CaisseEtatEvt(this.NumeroCaisse, this.EtatCaisse.ToString()));
         }
 
         private void EvenementClient(string _numeroClient, EvenementClientType _evenementClientType)
         {
-            this.apiConnecteur.EnvoyerEvenement(new CaisseClientEvt(this.NumeroCaisse, _numeroClient, _evenementClientType.ToString()));
+            this.apiConnecteur.EnvoyerEvenement(new ClientEvt(_numeroClient, _evenementClientType.ToString()));
         }
     
         #endregion
