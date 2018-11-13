@@ -28,6 +28,11 @@ namespace WebMVC.Controllers
                 VueErreurModele vueErreurModele = new VueErreurModele(Request, exception);
                 return View("Error", vueErreurModele);
             }
+            catch(System.AggregateException exception)
+            {
+                VueErreurModele vueErreurModele = new VueErreurModele(Request, exception);
+                return View("Error", vueErreurModele);
+            }
         }
 
         public IActionResult Detail(string id)
@@ -43,10 +48,15 @@ namespace WebMVC.Controllers
             // Appel API Externe.
             try
             {
-                ClientDTO clientDTO = _iClientService.DonneClient(id);
+                ClientItem clientDTO = _iClientService.DonneClient(id);
                 return View(clientDTO);
             }
             catch (HttpRequestException exception)
+            {
+                VueErreurModele vueErreurModele = new VueErreurModele(Request, exception);
+                return View("Error", vueErreurModele);
+            }
+            catch (System.AggregateException exception)
             {
                 VueErreurModele vueErreurModele = new VueErreurModele(Request, exception);
                 return View("Error", vueErreurModele);

@@ -26,14 +26,14 @@ namespace WebMVC.Services
             return retour;
         }
 
-        public ClientDTO DonneClient(string id)
+        public ClientItem DonneClient(string id)
         {
             var client = _httpClientFactory.CreateClient("ApiClientV1");
             string strUrl = $"/api/v1/clients/{id}";
 
             var donneesJson = client.GetStringAsync(strUrl).Result;
 
-            ClientDTO retour = JsonConvert.DeserializeObject<ClientDTO>(donneesJson);
+            ClientItem retour = JsonConvert.DeserializeObject<ClientItem>(donneesJson);
             return retour;
         }
     }

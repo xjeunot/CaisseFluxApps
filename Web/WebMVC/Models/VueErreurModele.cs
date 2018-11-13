@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 
@@ -16,6 +17,18 @@ namespace WebMVC.Models
 
         // Construction par l'exception déclenchée par HttpClient.
         public VueErreurModele(HttpRequest requete, HttpRequestException exception)
+        {
+            this.Requete =
+                requete.Protocol + " " +
+                requete.Method + " " +
+                requete.Host + requete.Path;
+            this.TypeErreur = VueErreurModeleType.Api;
+            this.Message = "Problème d'appel à une API externe";
+            this.ExceptionMessage = exception.Message;
+        }
+
+        // Erreur 404 API Externe.
+        public VueErreurModele(HttpRequest requete, AggregateException exception)
         {
             this.Requete =
                 requete.Protocol + " " +

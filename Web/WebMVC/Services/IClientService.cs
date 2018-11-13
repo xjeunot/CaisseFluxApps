@@ -9,6 +9,6 @@ namespace WebMVC.Services
 
         IEnumerable<string> DonneClients();
 
-        ClientDTO DonneClient(string id);
+        ClientItem DonneClient(string id);
     }
 }

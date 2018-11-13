@@ -1,0 +1,40 @@
+﻿@model IEnumerable<WebMVC.Models.CaissePhotoSimple>
+
+@{
+    ViewData["Title"] = "Accueil";
+}
+
+<h2>Accueil</h2>
+
+<table>
+@{
+    // Paramétrage.
+    int nbElementParLigne = 3;
+
+    // Préparation du tableau.
+    float nbLigneRequiseBruts = (float)Model.Count() / (float)nbElementParLigne;
+    double nbLigneRequiseReelles = Math.Ceiling(nbLigneRequiseBruts);
+
+    // On déroule les lignes.
+    int intNumeroElement = 0;
+    for (int iLigne = 1; iLigne <= nbLigneRequiseReelles; iLigne++)
+    {
+        <tr>@{
+            // On déroule les colonnes.
+            for (int iColonne = 1; iColonne <= nbElementParLigne; iColonne++)
+            {
+                // Si l'élément existe : on l'affiche.
+                if (intNumeroElement < Model.Count())
+                {
+                    <th>@{
+                        await Html.RenderPartialAsync("_DetailCaisseSimple", Model.ElementAt(intNumeroElement));
+                        intNumeroElement++;
+                    }
+                    </th>
+                }
+            }
+        }
+        </tr>
+    }
+ }
+</table>

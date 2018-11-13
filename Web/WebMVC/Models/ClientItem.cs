@@ -2,7 +2,7 @@
 
 namespace WebMVC.Models
 {
-    public class ClientDTO
+    public class ClientItem
     {
         public string Id { get; set; }
 
