@@ -3,11 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Caisse.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class CaisseController : ControllerBase
     {
-        // GET api/values
+        // GET api/v1/caisse
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
@@ -15,7 +15,7 @@ namespace Caisse.API.Controllers
             return new string[] { "value1", "value2" };
         }
 
-        // GET api/values/5
+        // GET api/v1/caisse/{id}
         [HttpGet("{id}")]
         public ActionResult<string> Get(int id)
         {
@@ -23,21 +23,21 @@ namespace Caisse.API.Controllers
             return "value";
         }
 
-        // POST api/values
+        // POST api/v1/caisse
         [HttpPost]
         public void Post([FromBody] string value)
         {
             //TODO : a faire !
         }
 
-        // PUT api/values/5
+        // PUT api/v1/caisse/{id}
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
         {
             //TODO : a faire !
         }
 
-        // DELETE api/values/5
+        // DELETE api/v1/caisse/{id}
         [HttpDelete("{id}")]
         public void Delete(int id)
         {

@@ -19,7 +19,7 @@ namespace Client.API.Controllers
             _clientsService = clientsService;
         }
 
-        // GET api/values
+        // GET api/v1/clients
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<string>))]
         public ActionResult<IEnumerable<string>> Get()
@@ -29,7 +29,7 @@ namespace Client.API.Controllers
             return Ok(clientItemsId);
         }
 
-        // GET api/values/5
+        // GET api/v1/clients/{id}
         [HttpGet("{id}")]
         [ProducesResponseType(200, Type = typeof(ClientItem))]
         [ProducesResponseType(400)]
@@ -47,21 +47,21 @@ namespace Client.API.Controllers
             return Ok(clientItem);
         }
 
-        // POST api/values
+        // POST api/v1/clients
         [HttpPost]
         public void Post([FromBody] ClientItem value)
         {
             //TODO : a faire
         }
 
-        // PUT api/values/5
+        // PUT api/v1/clients/{id}
         [HttpPut("{id}")]
         public void Put(string id, [FromBody] ClientItem value)
         {
             //TODO : a faire
         }
 
-        // DELETE api/values/5
+        // DELETE api/v1/clients/{id}
         [HttpDelete("{id}")]
         public void Delete(string id)
         {

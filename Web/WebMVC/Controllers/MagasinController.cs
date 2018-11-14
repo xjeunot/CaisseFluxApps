@@ -1,40 +1,38 @@
 ﻿using System.Collections.Generic;
+using System.Net.Http;
 using Microsoft.AspNetCore.Mvc;
+using WebMVC.Models;
+using WebMVC.Services;
 
 namespace WebMVC.Controllers
 {
     public class MagasinController : Controller
     {
+        private readonly IMagasinService _iMagasinService;
+
+        public MagasinController(IMagasinService iMagasinService)
+        {
+            _iMagasinService = iMagasinService;
+        }
+
         public IActionResult Accueil()
         {
-            IEnumerable<WebMVC.Models.CaissePhotoSimple> listePhoto = new List<WebMVC.Models.CaissePhotoSimple>()
+            // Appel API Externe.
+            try
             {
-                new Models.CaissePhotoSimple()
-                {
-                    Numero = 1,
-                    Etat = "Ouverte",
-                    ClientEnCours = "client_vkez"
-                },
-                new Models.CaissePhotoSimple()
-                {
-                    Numero = 2,
-                    Etat = "Ouverte",
-                    ClientEnCours = "client_vkas"
-                },
-                new Models.CaissePhotoSimple()
-                {
-                    Numero = 3,
-                    Etat = "En cours de fermeture",
-                    ClientEnCours = "client_afdz"
-                },
-                new Models.CaissePhotoSimple()
-                {
-                    Numero = 4,
-                    Etat = "Ouverte",
-                    ClientEnCours = "client_cjdx"
-                }
-            };
-            return View(listePhoto);
+                IEnumerable<WebMVC.Models.CaissePhotoSimple> listePhoto = _iMagasinService.DonneCaissesPhotoSimples();
+                return View(listePhoto);
+            }
+            catch (HttpRequestException exception)
+            {
+                VueErreurModele vueErreurModele = new VueErreurModele(Request, exception);
+                return View("Error", vueErreurModele);
+            }
+            catch (System.AggregateException exception)
+            {
+                VueErreurModele vueErreurModele = new VueErreurModele(Request, exception);
+                return View("Error", vueErreurModele);
+            }
         }
     }
 }

@@ -48,9 +48,22 @@ namespace WebMVC
                 TimeSpan.FromSeconds(5),
                 TimeSpan.FromSeconds(10)
             }));
+            // Ajout client Http : ApiMagasinV1
+            services.AddHttpClient("ApiMagasinV1", client =>
+            {
+                client.BaseAddress = new Uri(Configuration["ApiMagasinV1Url"]);
+                client.DefaultRequestHeaders.Add("Accept", "application/json");
+            })
+            .AddTransientHttpErrorPolicy(builder => builder.WaitAndRetryAsync(new[]
+            {
+                TimeSpan.FromSeconds(1),
+                TimeSpan.FromSeconds(5),
+                TimeSpan.FromSeconds(10)
+            }));
 
             // Ajout des API Services.
             services.AddTransient<IClientService, ClientService>();
+            services.AddTransient<IMagasinService, MagasinService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
