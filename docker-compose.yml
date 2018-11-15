@@ -1,0 +1,14 @@
+version: '3.4'
+
+services:
+  CaisseFluxApps.ClientApi:
+    image: ${DOCKER_REGISTRY}CaisseFluxApps.ClientApi
+    build:
+      context: .
+      dockerfile: Services/Client/Client.API/Dockerfile
+
+  CaisseFluxApps.MagasinApi:
+    image: ${DOCKER_REGISTRY}CaisseFluxApps.MagasinApi
+    build:
+      context: .
+      dockerfile: Services/Magasin/Magasin.API/Dockerfile
