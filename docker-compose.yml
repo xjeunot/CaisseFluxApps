@@ -1,14 +1,21 @@
 version: '3.4'
 
 services:
-  CaisseFluxApps.ClientApi:
-    image: ${DOCKER_REGISTRY}CaisseFluxApps.ClientApi
+  client.api:
+    image: ${DOCKER_REGISTRY-}clientapi
     build:
       context: .
       dockerfile: Services/Client/Client.API/Dockerfile
+    ports:
+      - "5001:443"
 
-  CaisseFluxApps.MagasinApi:
-    image: ${DOCKER_REGISTRY}CaisseFluxApps.MagasinApi
+  magasin.api:
+    image: ${DOCKER_REGISTRY-}magasinapi
     build:
       context: .
       dockerfile: Services/Magasin/Magasin.API/Dockerfile
+  simulationflux.api:
+    image: ${DOCKER_REGISTRY-}simulationfluxapi
+    build:
+      context: .
+      dockerfile: Services/SimulationFlux/SimulationFlux.API/Dockerfile
