@@ -2,20 +2,20 @@ version: '3.4'
 
 services:
   client.api:
-    image: ${DOCKER_REGISTRY-}clientapi
+    image: xjeunotfr59/clientapi:dev
     build:
       context: .
       dockerfile: Services/Client/Client.API/Dockerfile
     ports:
       - "5001:443"
-
+      - "5000:80"
   magasin.api:
-    image: ${DOCKER_REGISTRY-}magasinapi
+    image: xjeunotfr59/magasinapi:dev
     build:
       context: .
       dockerfile: Services/Magasin/Magasin.API/Dockerfile
   simulationflux.api:
-    image: ${DOCKER_REGISTRY-}simulationfluxapi
+    image: xjeunotfr59/simulationfluxapi:dev
     build:
       context: .
       dockerfile: Services/SimulationFlux/SimulationFlux.API/Dockerfile
